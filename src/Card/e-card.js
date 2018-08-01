@@ -1,4 +1,5 @@
-import styled from 'react-emotion';
+import styled, { css } from 'react-emotion';
+import mq from '../theme/mediaqueries';
 
 const Card = styled('div')`
   background: linear-gradient(to right, #fd746c, #ff9068);
@@ -6,7 +7,7 @@ const Card = styled('div')`
   border: 1px solid;
   padding: 1em 1em 0;
   color: white;
-  min-height: 4em;
+  min-height: 100%;
   position: relative;
 `;
 
@@ -14,6 +15,10 @@ export const CardShower = styled('div')`
   display: grid;
   grid-template-columns: 1fr;
   grid-gap: 0.8em;
+
+  ${mq.medium(css`
+    grid-template-columns: repeat(5, 1fr);
+  `)};
 `;
 
 export const Title = styled('h3')`

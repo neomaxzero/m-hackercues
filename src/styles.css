@@ -3,6 +3,7 @@
   background: linear-gradient(to bottom, #fd746c, #ff9068);
   text-align: center;
   padding: 1.5em;
+  min-height: 100vh;
 }
 
 a {
@@ -13,4 +14,5 @@ a {
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
