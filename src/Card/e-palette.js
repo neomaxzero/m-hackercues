@@ -1,16 +1,16 @@
 // Ten hierarchy categories
 
 const colors = {
-  Tier1: '#90A4AE',
-  Tier2: '#E0E0E0',
-  Tier3: '#A1887F',
-  Tier4: '#FF8A65',
-  Tier5: '#FFB74D',
-  Tier6: '#FFD54F',
-  Tier7: '#FFF176',
-  Tier8: '#DCE775',
-  Tier9: '#AED581',
-  Tier10: '#81C784',
+  Tier1: '#FFE0B2',
+  Tier2: '#FFE0B2',
+  Tier3: '#FFCC80',
+  Tier4: '#FFB74D',
+  Tier5: '#FFA726',
+  Tier6: '#FF9800',
+  Tier7: '#FB8C00',
+  Tier8: '#F57C00',
+  Tier9: '#EF6C00',
+  Tier10: '#E65100',
 };
 
 export default score => {
