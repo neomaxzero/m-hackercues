@@ -23,7 +23,6 @@ export const CardShower = styled('div')`
 
 export const Title = styled('h3')`
   font-size: 0.9em;
-  font-weight: bold;
 `;
 
 export const Author = styled('span')`
