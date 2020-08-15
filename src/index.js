@@ -1,25 +1,28 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import Shower from './shower';
-import Title, { Footer, H, Rest } from './e-layout';
+import React from "react";
+import ReactDOM from "react-dom";
+import Shower from "./shower";
+import Title, { Footer, H, Rest, Main, App as AppStyled } from "./e-layout";
 
-import './styles.css';
+import "./styles.css";
 
 function App() {
   return (
-    <div className="App">
+    <AppStyled>
       <Title>
         <H>H</H>
         <Rest>ackercues</Rest>
       </Title>
-
-      <Shower />
-      <a href="https://z3ro.com.ar" target="_blank" rel="noopener noreferrer">
-        <Footer>Neomaxzero - z3ro.com.ar</Footer>
-      </a>
-    </div>
+      <Main>
+        <Shower />
+      </Main>
+      <Footer>
+        <a href="https://blog.m4x.io" target="_blank" rel="noopener noreferrer">
+          m4x.io
+        </a>
+      </Footer>
+    </AppStyled>
   );
 }
 
-const rootElement = document.getElementById('root');
+const rootElement = document.getElementById("root");
 ReactDOM.render(<App />, rootElement);
