@@ -17,6 +17,7 @@ export default class Shower extends Component {
     data: [],
     loading: true,
     elementsSeen: JSON.parse(localStorage.getItem("seen") || "[]"),
+    elementsDeleted: JSON.parse(localStorage.getItem("deleted") || "[]"),
   };
 
   componentDidMount() {
@@ -32,6 +33,15 @@ export default class Shower extends Component {
     this.setState({ elementsSeen: [...this.state.elementsSeen, id] });
   };
 
+  onDelete = (id) => {
+    localStorage.setItem(
+      "deleted",
+      JSON.stringify([...this.state.elementsDeleted, id])
+    );
+
+    this.setState({ elementsDeleted: [...this.state.elementsDeleted, id] });
+  };
+
   render() {
     if (!this.state.data.length) return <Loader>Loading...</Loader>;
 
@@ -39,6 +49,7 @@ export default class Shower extends Component {
       <CardShower>
         {this.state.data
           .filter((el) => !this.state.elementsSeen.includes(el.id))
+          .filter((el) => !this.state.elementsDeleted.includes(el.id))
           .map((el) => (
             <Card
               key={el.id}
@@ -48,6 +59,7 @@ export default class Shower extends Component {
               url={el.url}
               id={el.id}
               saveSeen={this.saveSeen}
+              onDelete={this.onDelete}
             />
           ))}
       </CardShower>
