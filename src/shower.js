@@ -116,8 +116,8 @@ export default class Shower extends Component {
               onDelete={this.onDelete}
               onStashed={this.saveStashed}
             />
-          ))} */}
-        </CardShower>
+          ))} 
+        </CardShower>*/}
         
       </div>
     );
