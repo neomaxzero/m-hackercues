@@ -17,6 +17,11 @@ export default class Card extends Component {
               e.preventDefault();
               this.props.onDelete(this.props.id);
             }}
+            onStashed={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              this.props.onStashed(this.props.id);
+            }}
           />
           <ColorCue background={color(this.props.score)} />
           <Title>{this.props.title}</Title>

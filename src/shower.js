@@ -2,22 +2,16 @@ import React, { Component } from "react";
 import news from "./news.service";
 import { CardShower, Loader } from "./Card/e-card";
 import Card from "./card";
-// by: "rubyn00bie"
-// descendants: 93
-// id: 17636032
-// kids: Array[20]
-// score: 270
-// time: 1532828694
-// title: "Detecting the use of "curl | bash" server-side"
-// type: "story"
-// url: "https://www.idontplaydarts.com/2016/04/detecting-curl-pipe-bash-server-side/"
-
+import PrimaryCard from "./PrimaryCard";
+import Center from "./Center";
+import { H2, Message } from "./Card/e-elements";
 export default class Shower extends Component {
   state = {
     data: [],
     loading: true,
     elementsSeen: JSON.parse(localStorage.getItem("seen") || "[]"),
     elementsDeleted: JSON.parse(localStorage.getItem("deleted") || "[]"),
+    elementsStashed: JSON.parse(localStorage.getItem("stashed") || "[]"),
   };
 
   componentDidMount() {
@@ -33,6 +27,15 @@ export default class Shower extends Component {
     this.setState({ elementsSeen: [...this.state.elementsSeen, id] });
   };
 
+  saveStashed = (id) => {
+    localStorage.setItem(
+      "stashed",
+      JSON.stringify([...this.state.elementsStashed, id])
+    );
+
+    this.setState({ elementsStashed: [...this.state.elementsStashed, id] });
+  };
+
   onDelete = (id) => {
     localStorage.setItem(
       "deleted",
@@ -44,13 +47,32 @@ export default class Shower extends Component {
 
   render() {
     if (!this.state.data.length) return <Loader>Loading...</Loader>;
-
+    const [firstElement, ...restCards] = this.state.data
+      .filter((el) => !this.state.elementsSeen.includes(el.id))
+      .filter((el) => !this.state.elementsDeleted.includes(el.id))
+      .filter((el) => !this.state.elementsStashed.includes(el.id));
     return (
-      <CardShower>
-        {this.state.data
-          .filter((el) => !this.state.elementsSeen.includes(el.id))
-          .filter((el) => !this.state.elementsDeleted.includes(el.id))
-          .map((el) => (
+      <div>
+        {!firstElement && (
+          <Center height="80vh">
+            <Message>We are done! for now...</Message>
+          </Center>
+        )}
+        {firstElement && (
+          <PrimaryCard
+            key={firstElement.id}
+            title={firstElement.title}
+            by={firstElement.by}
+            score={firstElement.score}
+            url={firstElement.url}
+            id={firstElement.id}
+            saveSeen={this.saveSeen}
+            onDelete={this.onDelete}
+            onStashed={this.saveStashed}
+          />
+        )}
+        <CardShower>
+          {restCards.map((el) => (
             <Card
               key={el.id}
               title={el.title}
@@ -60,9 +82,44 @@ export default class Shower extends Component {
               id={el.id}
               saveSeen={this.saveSeen}
               onDelete={this.onDelete}
+              onStashed={this.saveStashed}
             />
           ))}
-      </CardShower>
+        </CardShower>
+        {/* <H2>Saved</H2>
+        <CardShower>
+          {this.state.elementsStashed.map((el) => (
+            <Card
+              key={el.id}
+              title={el.title}
+              by={el.by}
+              score={el.score}
+              url={el.url}
+              id={el.id}
+              saveSeen={this.saveSeen}
+              onDelete={this.onDelete}
+              onStashed={this.saveStashed}
+            />
+          ))}
+        </CardShower>
+        <H2>Deleted</H2>
+        <CardShower>
+          {this.state.elementsStashed.map((el) => (
+            <Card
+              key={el.id}
+              title={el.title}
+              by={el.by}
+              score={el.score}
+              url={el.url}
+              id={el.id}
+              saveSeen={this.saveSeen}
+              onDelete={this.onDelete}
+              onStashed={this.saveStashed}
+            />
+          ))} */}
+        </CardShower>
+        
+      </div>
     );
   }
 }

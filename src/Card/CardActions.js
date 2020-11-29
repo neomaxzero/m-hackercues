@@ -1,5 +1,7 @@
 import React from "react";
-import styled, { css } from "react-emotion";
+
+import styled from '@emotion/styled'
+import { css } from 'emotion'
 
 const ActionContainer = styled("div")`
   margin-bottom: 1rem;
@@ -13,11 +15,13 @@ const Btn = styled("button")`
   border-radius: 4px;
   background-color: #44000a;
   cursor: pointer;
+  margin-left: 0.4rem;
 `;
 
-const CardActions = ({ onDelete }) => (
+const CardActions = ({ onDelete, onStashed }) => (
   <ActionContainer>
     <Btn onClick={onDelete}>del</Btn>
+    <Btn onClick={onStashed}>save</Btn>
   </ActionContainer>
 );
 
