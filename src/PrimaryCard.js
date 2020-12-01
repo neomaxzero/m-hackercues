@@ -1,5 +1,5 @@
 import React, { Component, useEffect } from "react";
-import CardContainer, { Author, Score, ColorCue } from "./Card/e-card";
+import CardContainer, { Author, ColorCue } from "./Card/e-card";
 import color from "./Card/e-palette";
 import CardActions from "./Card/CardActions";
 import styled from '@emotion/styled'
@@ -26,8 +26,17 @@ const Sizer = styled("div")`
   `)};
 `;
 
+
+ const Score = styled("div")`
+  text-align: center;
+  color: #c8e6fc;
+  font-size: ${({ big }) => (big ? "3.5em" : "2.4em")};
+  font-weight: bold;
+  opacity: 0.4;
+`;
+
 export const Title = styled("h3")`
-  font-size: 2.4em;
+  font-size: 1.6em;
 `;
 
 const PrimaryCard = ({
@@ -73,9 +82,8 @@ const PrimaryCard = ({
             />
             <ColorCue background={color(score)} />
             <Center vertical height="calc(100% - 100px)">
+              <Score>{score}</Score>
               <Title>{title}</Title>
-              <Score big>{score}</Score>
-              <Author big>{by}</Author>
             </Center>
           </CardContainer>
         </a>
