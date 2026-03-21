@@ -1,62 +1,75 @@
-import styled from '@emotion/styled'
-import { css } from 'emotion'
+import styled from '@emotion/styled';
+import { css } from 'emotion';
 import mq from "../theme/mediaqueries";
 
 const Card = styled("div")`
-  background: linear-gradient(to right, #1f0318, #660014);
-  border-radius: 2px;
-  border: 1px solid #660014;
-  padding: 1em 1em 0;
+  background: linear-gradient(145deg, #280420, #6a0018);
+  border-radius: 10px;
+  border: 1px solid rgba(150, 0, 40, 0.5);
+  padding: 0.85em 0.85em 0.6em;
   color: white;
   height: 100%;
   position: relative;
+  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  transition: transform 0.12s;
+
+  &:active {
+    transform: scale(0.97);
+  }
 `;
 
 export const CardShower = styled("div")`
   display: grid;
-  grid-template-columns: 1fr;
-  grid-gap: 0.8em;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.55em;
+  padding-bottom: 1rem;
 
   ${mq.medium(css`
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
   `)};
 `;
 
 export const Title = styled("h3")`
-  font-size: 0.9em;
+  font-size: 0.88em;
+  line-height: 1.4;
+  color: white;
+  font-weight: 600;
 `;
 
 export const Author = styled("span")`
-  display: inline-block;
-  text-align: center;
-  color: #ffcbb7;
-  font-size: ${({ big }) => (big ? "1em" : "0.4em")};
-  padding: 0 0 0.4em;
+  display: block;
+  color: rgba(255, 200, 160, 0.6);
+  font-size: 0.72em;
+  margin-top: 0.35em;
 `;
 
 export const Score = styled("div")`
-  text-align: center;
-  color: #c8e6fc;
   position: absolute;
-  font-size: ${({ big }) => (big ? "3.5em" : "2.4em")};
-  right: 0;
-  bottom: -10px;
-  font-weight: bold;
-  opacity: 0.4;
+  right: 0.4rem;
+  bottom: -0.2rem;
+  font-size: 2em;
+  font-weight: 900;
+  opacity: 0.2;
+  color: white;
 `;
 
 export const Loader = styled("div")`
   text-align: center;
-  color: white;
+  color: rgba(255, 255, 255, 0.6);
   min-height: 300px;
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: 0.85em;
+  letter-spacing: 0.08em;
 `;
 
 export const ColorCue = styled("div")`
   background-color: ${({ background }) => background};
-  height: 5px;
-  margin-bottom: 10px;
+  height: 4px;
+  margin: -0.85em -0.85em 0.75em;
+  border-radius: 10px 10px 0 0;
 `;
+
 export default Card;

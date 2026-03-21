@@ -1,27 +1,50 @@
 import React from "react";
-
-import styled from '@emotion/styled'
-import { css } from 'emotion'
+import styled from '@emotion/styled';
 
 const ActionContainer = styled("div")`
-  margin-bottom: 1rem;
-  text-align: right;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.4rem;
+  margin-bottom: 0.6rem;
 `;
 
 const Btn = styled("button")`
-  border: 1px solid #b2002a;
-  padding: 3px 10px;
-  color: #b2002a;
-  border-radius: 4px;
-  background-color: #44000a;
+  height: 34px;
+  min-width: 34px;
+  padding: 0 12px;
+  border-radius: 17px;
+  font-size: 0.85em;
+  font-weight: 700;
   cursor: pointer;
-  margin-left: 0.4rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: transform 0.1s, filter 0.1s;
+
+  &:active {
+    transform: scale(0.88);
+    filter: brightness(0.8);
+  }
+`;
+
+const DeleteBtn = styled(Btn)`
+  background: rgba(255, 60, 60, 0.12);
+  color: #ff7777;
+  border: 1px solid rgba(255, 60, 60, 0.3);
+`;
+
+const SaveBtn = styled(Btn)`
+  background: rgba(50, 210, 100, 0.1);
+  color: #55ee99;
+  border: 1px solid rgba(50, 210, 100, 0.25);
 `;
 
 const CardActions = ({ onDelete, onStashed }) => (
   <ActionContainer>
-    <Btn onClick={onDelete}>del</Btn>
-    <Btn onClick={onStashed}>save</Btn>
+    <DeleteBtn onClick={onDelete}>✕</DeleteBtn>
+    <SaveBtn onClick={onStashed}>✓</SaveBtn>
   </ActionContainer>
 );
 

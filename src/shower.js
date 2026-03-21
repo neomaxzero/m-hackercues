@@ -1,14 +1,49 @@
 import React, { Component } from "react";
+import styled from '@emotion/styled';
 import news from "./news.service";
 import { CardShower, Loader } from "./Card/e-card";
 import Card from "./card";
 import PrimaryCard from "./PrimaryCard";
 import Center from "./Center";
-import { H2, Message } from "./Card/e-elements";
+import { Message } from "./Card/e-elements";
+
+const TabBar = styled("div")`
+  display: flex;
+  margin: 0 auto 1.25rem;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 10px;
+  padding: 4px;
+  width: fit-content;
+`;
+
+const Tab = styled("button")`
+  padding: 8px 24px;
+  border: none;
+  background: ${({ isActive }) => isActive ? 'rgba(255, 255, 255, 0.14)' : 'transparent'};
+  color: ${({ isActive }) => isActive ? 'white' : 'rgba(255, 255, 255, 0.38)'};
+  border-radius: 8px;
+  font-size: 0.85em;
+  font-weight: ${({ isActive }) => isActive ? '700' : '400'};
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.18s, color 0.18s;
+`;
+
+const Counter = styled("div")`
+  text-align: center;
+  color: rgba(255, 255, 255, 0.26);
+  font-size: 0.7em;
+  margin-bottom: 0.6rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+`;
+
 export default class Shower extends Component {
   state = {
     data: [],
     loading: true,
+    tab: 'feed',
     elementsSeen: JSON.parse(localStorage.getItem("seen") || "[]"),
     elementsDeleted: JSON.parse(localStorage.getItem("deleted") || "[]"),
     elementsStashed: JSON.parse(localStorage.getItem("stashed") || "[]"),
@@ -18,107 +53,119 @@ export default class Shower extends Component {
     news().then((results) => this.setState({ data: results, loading: false }));
   }
 
-  saveSeen = (id) => {
-    localStorage.setItem(
-      "seen",
-      JSON.stringify([...this.state.elementsSeen, id])
-    );
+  setTab = (tab) => this.setState({ tab });
 
-    this.setState({ elementsSeen: [...this.state.elementsSeen, id] });
+  saveSeen = (id) => {
+    const updated = [...this.state.elementsSeen, id];
+    localStorage.setItem("seen", JSON.stringify(updated));
+    this.setState({ elementsSeen: updated });
   };
 
   saveStashed = (id) => {
-    localStorage.setItem(
-      "stashed",
-      JSON.stringify([...this.state.elementsStashed, id])
-    );
-
-    this.setState({ elementsStashed: [...this.state.elementsStashed, id] });
+    const updated = [...this.state.elementsStashed, id];
+    localStorage.setItem("stashed", JSON.stringify(updated));
+    this.setState({ elementsStashed: updated });
   };
 
   onDelete = (id) => {
-    localStorage.setItem(
-      "deleted",
-      JSON.stringify([...this.state.elementsDeleted, id])
-    );
+    const updated = [...this.state.elementsDeleted, id];
+    localStorage.setItem("deleted", JSON.stringify(updated));
+    this.setState({ elementsDeleted: updated });
+  };
 
-    this.setState({ elementsDeleted: [...this.state.elementsDeleted, id] });
+  onUnsave = (id) => {
+    const updated = this.state.elementsStashed.filter(i => i !== id);
+    localStorage.setItem("stashed", JSON.stringify(updated));
+    this.setState({ elementsStashed: updated });
   };
 
   render() {
-    if (!this.state.data.length) return <Loader>Loading...</Loader>;
-    const [firstElement, ...restCards] = this.state.data
-      .filter((el) => !this.state.elementsSeen.includes(el.id))
-      .filter((el) => !this.state.elementsDeleted.includes(el.id))
-      .filter((el) => !this.state.elementsStashed.includes(el.id));
+    const { loading, tab, data, elementsSeen, elementsDeleted, elementsStashed } = this.state;
+
+    if (loading) return <Loader>Loading...</Loader>;
+
+    const feedCards = data
+      .filter(el => !elementsSeen.includes(el.id))
+      .filter(el => !elementsDeleted.includes(el.id))
+      .filter(el => !elementsStashed.includes(el.id));
+
+    const savedStories = data.filter(el => elementsStashed.includes(el.id));
+    const [firstElement, ...restCards] = feedCards;
+
     return (
       <div>
-        {!firstElement && (
-          <Center height="80vh">
-            <Message>We are done! for now...</Message>
-          </Center>
+        <TabBar>
+          <Tab isActive={tab === 'feed'} onClick={() => this.setTab('feed')}>Feed</Tab>
+          <Tab isActive={tab === 'saved'} onClick={() => this.setTab('saved')}>
+            Saved{elementsStashed.length > 0 ? ` (${elementsStashed.length})` : ''}
+          </Tab>
+        </TabBar>
+
+        {tab === 'feed' && (
+          <>
+            {!firstElement && (
+              <Center height="65vh">
+                <Message>All caught up!</Message>
+              </Center>
+            )}
+            {firstElement && (
+              <>
+                <Counter>{feedCards.length} {feedCards.length === 1 ? 'story' : 'stories'} left</Counter>
+                <PrimaryCard
+                  key={firstElement.id}
+                  title={firstElement.title}
+                  by={firstElement.by}
+                  score={firstElement.score}
+                  url={firstElement.url}
+                  id={firstElement.id}
+                  saveSeen={this.saveSeen}
+                  onDelete={this.onDelete}
+                  onStashed={this.saveStashed}
+                />
+              </>
+            )}
+            <CardShower>
+              {restCards.map(el => (
+                <Card
+                  key={el.id}
+                  title={el.title}
+                  by={el.by}
+                  score={el.score}
+                  url={el.url}
+                  id={el.id}
+                  saveSeen={this.saveSeen}
+                  onDelete={this.onDelete}
+                  onStashed={this.saveStashed}
+                />
+              ))}
+            </CardShower>
+          </>
         )}
-        {firstElement && (
-          <PrimaryCard
-            key={firstElement.id}
-            title={firstElement.title}
-            by={firstElement.by}
-            score={firstElement.score}
-            url={firstElement.url}
-            id={firstElement.id}
-            saveSeen={this.saveSeen}
-            onDelete={this.onDelete}
-            onStashed={this.saveStashed}
-          />
+
+        {tab === 'saved' && (
+          <>
+            {savedStories.length === 0 && (
+              <Center height="65vh">
+                <Message>No saved stories yet</Message>
+              </Center>
+            )}
+            <CardShower>
+              {savedStories.map(el => (
+                <Card
+                  key={el.id}
+                  title={el.title}
+                  by={el.by}
+                  score={el.score}
+                  url={el.url}
+                  id={el.id}
+                  saveSeen={this.saveSeen}
+                  onDelete={this.onUnsave}
+                  onStashed={this.saveStashed}
+                />
+              ))}
+            </CardShower>
+          </>
         )}
-        <CardShower>
-          {restCards.map((el) => (
-            <Card
-              key={el.id}
-              title={el.title}
-              by={el.by}
-              score={el.score}
-              url={el.url}
-              id={el.id}
-              saveSeen={this.saveSeen}
-              onDelete={this.onDelete}
-              onStashed={this.saveStashed}
-            />
-          ))}
-        </CardShower>
-        {/* <H2>Saved</H2>
-        <CardShower>
-          {this.state.elementsStashed.map((el) => (
-            <Card
-              key={el.id}
-              title={el.title}
-              by={el.by}
-              score={el.score}
-              url={el.url}
-              id={el.id}
-              saveSeen={this.saveSeen}
-              onDelete={this.onDelete}
-              onStashed={this.saveStashed}
-            />
-          ))}
-        </CardShower>
-        <H2>Deleted</H2>
-        <CardShower>
-          {this.state.elementsStashed.map((el) => (
-            <Card
-              key={el.id}
-              title={el.title}
-              by={el.by}
-              score={el.score}
-              url={el.url}
-              id={el.id}
-              saveSeen={this.saveSeen}
-              onDelete={this.onDelete}
-              onStashed={this.saveStashed}
-            />
-          ))} 
-        </CardShower>*/}
-        
       </div>
     );
   }
