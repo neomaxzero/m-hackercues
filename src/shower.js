@@ -102,14 +102,14 @@ export default class Shower extends Component {
         </TabBar>
 
         {tab === 'feed' && (
-          <>
+          <React.Fragment>
             {!firstElement && (
               <Center height="65vh">
                 <Message>All caught up!</Message>
               </Center>
             )}
             {firstElement && (
-              <>
+              <React.Fragment>
                 <Counter>{feedCards.length} {feedCards.length === 1 ? 'story' : 'stories'} left</Counter>
                 <PrimaryCard
                   key={firstElement.id}
@@ -122,7 +122,7 @@ export default class Shower extends Component {
                   onDelete={this.onDelete}
                   onStashed={this.saveStashed}
                 />
-              </>
+              </React.Fragment>
             )}
             <CardShower>
               {restCards.map(el => (
@@ -139,11 +139,11 @@ export default class Shower extends Component {
                 />
               ))}
             </CardShower>
-          </>
+          </React.Fragment>
         )}
 
         {tab === 'saved' && (
-          <>
+          <React.Fragment>
             {savedStories.length === 0 && (
               <Center height="65vh">
                 <Message>No saved stories yet</Message>
@@ -164,7 +164,7 @@ export default class Shower extends Component {
                 />
               ))}
             </CardShower>
-          </>
+          </React.Fragment>
         )}
       </div>
     );
